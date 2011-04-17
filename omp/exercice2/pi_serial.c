@@ -2,12 +2,6 @@
 #include <sys/time.h>
 #include <omp.h>
 
-inline unsigned long long get_time_in_us()
-{
-  struct timeval val;
-	gettimeofday(&val, NULL);
-	return (val.tv_sec*1000000+val.tv_usec);
-}
 static long num_steps = 10000000;
 double step;
 int main(int argc, char **argv)
