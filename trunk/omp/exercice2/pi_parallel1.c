@@ -26,22 +26,24 @@ int main(int argc, char **argv)
 								N = omp_get_num_threads();
 								ID = omp_get_thread_num();				
 								chunkSize = num_steps/N;
-
+								
 								startIndex = ID*chunkSize;
 								stopIndex = startIndex+chunkSize;
 								//pi calculation
 								for(i=startIndex;i<stopIndex;i++){
 												x=(i+0.5)*step;
-												sum[ID]=sum[ID]+4.0/(1.0+x*x);
+#pragma omp atomic
+												//sum[ID]=sum[ID]+4.0/(1.0+x*x);
+												sum[ID]+=4.0/(1.0+x*x);
 								}
 				}
 				for (i=0;i<NUM_THREADS;i++)
-				  pi += sum[i];
+								pi += sum[i];
 				pi*=step;
 
 				stop = omp_get_wtime();
 
-        printf("found pi   = %lf \n", pi);
+				printf("found pi   = %lf \n", pi);
 
 				printf("Elapsed time parallel version : %lf s\n", stop-start);
 
